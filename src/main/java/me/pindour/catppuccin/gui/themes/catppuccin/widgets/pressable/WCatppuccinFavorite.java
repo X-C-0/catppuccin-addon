@@ -2,6 +2,7 @@ package me.pindour.catppuccin.gui.themes.catppuccin.widgets.pressable;
 
 import me.pindour.catppuccin.gui.themes.catppuccin.CatppuccinWidget;
 import me.pindour.catppuccin.gui.themes.catppuccin.icons.CatppuccinBuiltinIcons;
+import me.pindour.catppuccin.utils.WidgetUtils;
 import meteordevelopment.meteorclient.gui.renderer.GuiRenderer;
 import meteordevelopment.meteorclient.gui.widgets.pressable.WFavorite;
 import meteordevelopment.meteorclient.utils.render.color.Color;
@@ -11,6 +12,8 @@ public class WCatppuccinFavorite extends WFavorite implements CatppuccinWidget {
 
     public WCatppuccinFavorite(boolean checked) {
         super(checked);
+        tooltip = getTooltip();
+        WidgetUtils.enableInstantTooltips(this);
     }
 
     @Override
@@ -22,6 +25,12 @@ public class WCatppuccinFavorite extends WFavorite implements CatppuccinWidget {
     protected void onCalculateSize() {
         width = size;
         height = size;
+    }
+
+    @Override
+    protected void onPressed(int button) {
+        super.onPressed(button);
+        tooltip = getTooltip();
     }
 
     @Override
@@ -43,5 +52,9 @@ public class WCatppuccinFavorite extends WFavorite implements CatppuccinWidget {
                 : mouseOver
                     ? theme().textSecondaryColor()
                     : theme().textColor();
+    }
+
+    private String getTooltip() {
+        return checked ? "Remove from favorites" : "Add to favorites";
     }
 }
