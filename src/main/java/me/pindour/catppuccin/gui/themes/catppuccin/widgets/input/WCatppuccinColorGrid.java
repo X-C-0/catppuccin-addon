@@ -99,7 +99,7 @@ public class WCatppuccinColorGrid<T> extends WVerticalList implements Catppuccin
     }
 
     private double swatchSize() {
-        return theme().scale(theme().textHeight() * SWATCH_SIZE_FACTOR);
+        return theme().textHeight() * SWATCH_SIZE_FACTOR;
     }
 
     private int visibleCount() {
@@ -167,7 +167,7 @@ public class WCatppuccinColorGrid<T> extends WVerticalList implements Catppuccin
         }
 
         private void renderTick(GuiRenderer renderer) {
-            double tickSize = width * 0.6;
+            double tickSize = swatchSize() * 0.8;
 
             renderer.rotatedQuad(
                     x + (width - tickSize) / 2,
