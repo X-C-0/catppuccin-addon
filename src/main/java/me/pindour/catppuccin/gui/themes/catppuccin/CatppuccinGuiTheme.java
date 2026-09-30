@@ -30,6 +30,7 @@ import me.pindour.catppuccin.gui.widgets.input.WSearch;
 import me.pindour.catppuccin.gui.widgets.pressable.WColorPicker;
 import me.pindour.catppuccin.renderer.CatppuccinRenderer;
 import me.pindour.catppuccin.renderer.text.RichTextRenderer;
+import me.pindour.catppuccin.utils.ColorUtils;
 import meteordevelopment.meteorclient.gui.GuiTheme;
 import meteordevelopment.meteorclient.gui.WidgetScreen;
 import meteordevelopment.meteorclient.gui.renderer.packer.GuiTexture;
@@ -909,7 +910,7 @@ public class CatppuccinGuiTheme extends GuiTheme {
         }
 
         public Color get(float alpha) {
-            return withAlpha(normal.get(), alpha);
+            return ColorUtils.withAlpha(normal.get(), alpha);
         }
 
         public Color get(boolean pressed, boolean hovered, boolean bypassDisableHoverColor) {
@@ -919,7 +920,7 @@ public class CatppuccinGuiTheme extends GuiTheme {
 
         public Color get(boolean pressed, boolean hovered, boolean bypassDisableHoverColor, float alpha) {
             Color color = get(pressed, hovered, bypassDisableHoverColor);
-            return withAlpha(color, alpha);
+            return ColorUtils.withAlpha(color, alpha);
         }
 
         public Color get(boolean pressed, boolean hovered) {
@@ -936,12 +937,6 @@ public class CatppuccinGuiTheme extends GuiTheme {
 
         public Color get(boolean hovered, float alpha) {
             return get(false, hovered, false, alpha);
-        }
-
-        private Color withAlpha(Color color, float alpha) {
-            Color result = color.copy().a((int) (255 * alpha));
-            result.validate();
-            return result;
         }
     }
 }

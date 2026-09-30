@@ -18,9 +18,16 @@ public class WCatppuccinView extends WView implements CatppuccinWidget {
     @Override
     protected void onRender(GuiRenderer renderer, double mouseX, double mouseY, double delta) {
         if (canScroll && hasScrollBar) {
+            roundedRect().pos(handleX(), y)
+                         .size(handleWidth(), height)
+                         .radius(smallRadius())
+                         .color(theme().crustColor())
+                         .render();
+
             roundedRect().pos(handleX(), handleY())
                          .size(handleWidth(), handleHeight())
                          .radius(smallRadius())
+                         .outline(theme().crustColor(), 1f)
                          .color(theme().scrollbarColor.get(
                                  //? if >=1.21.11 {
                                  focused,
