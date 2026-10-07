@@ -74,7 +74,8 @@ public class CatppuccinModulesScreen extends TabScreen {
         }
 
         // Credit
-        add(theme.label("Catppuccin Theme by Pindour")).bottom().right();
+        if (theme.modulesWatermark.get())
+            add(theme.label("Catppuccin Theme by Pindour")).bottom().right();
     }
 
     @Override

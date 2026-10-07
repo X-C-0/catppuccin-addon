@@ -140,6 +140,13 @@ public class CatppuccinGuiTheme extends GuiTheme {
             .build()
     );
 
+    public final Setting<Boolean> modulesWatermark = sgGeneral.add(new BoolSetting.Builder()
+            .name("modules-watermark")
+            .description("Toggle watermark in the modules screen.")
+            .defaultValue(true)
+            .build()
+    );
+
     public final Setting<Boolean> indentSettings = sgGeneral.add(new BoolSetting.Builder()
             .name("indent-settings")
             .description("Indents setting that have conditional visibility like in a Tree View.")
