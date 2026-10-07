@@ -5,7 +5,8 @@ import it.unimi.dsi.fastutil.ints.IntList;
 import me.pindour.catppuccin.gui.screens.settings.CatppuccinColorSettingScreen;
 import me.pindour.catppuccin.gui.themes.catppuccin.colors.CatppuccinAccentColor;
 import me.pindour.catppuccin.gui.themes.catppuccin.colors.ColorLink;
-import me.pindour.catppuccin.gui.themes.catppuccin.colors.ColorLinkRegistry;import me.pindour.catppuccin.gui.themes.catppuccin.icons.CatppuccinBuiltinIcons;
+import me.pindour.catppuccin.gui.themes.catppuccin.colors.ColorLinkRegistry;
+import me.pindour.catppuccin.gui.themes.catppuccin.icons.CatppuccinBuiltinIcons;
 import me.pindour.catppuccin.gui.themes.catppuccin.widgets.input.WCatppuccinColorGrid;
 import me.pindour.catppuccin.gui.screens.settings.CatppuccinEntityTypeListSettingScreen;
 import me.pindour.catppuccin.api.text.RichText;
@@ -15,7 +16,8 @@ import me.pindour.catppuccin.gui.themes.catppuccin.widgets.pressable.WCatppuccin
 import me.pindour.catppuccin.gui.themes.catppuccin.widgets.settings.WCatppuccinDoubleEdit;
 import me.pindour.catppuccin.gui.themes.catppuccin.widgets.settings.WCatppuccinIntEdit;
 import me.pindour.catppuccin.gui.themes.catppuccin.widgets.settings.WCatppuccinKeybind;
-import me.pindour.catppuccin.gui.widgets.WGuiTexture;import me.pindour.catppuccin.gui.widgets.container.WTreeTable;
+import me.pindour.catppuccin.gui.widgets.WGuiTexture;
+import me.pindour.catppuccin.gui.widgets.container.WTreeTable;
 import me.pindour.catppuccin.gui.widgets.pressable.WColorPicker;
 import me.pindour.catppuccin.mixin.meteorclient.SettingAccessor;
 import me.pindour.catppuccin.utils.SettingWatcher;
@@ -54,8 +56,10 @@ import org.lwjgl.util.tinyfd.TinyFileDialogs;
 import java.io.File;
 //? }
 
-//? if >=26.2
+//? if >=26.2 {
+import me.pindour.catppuccin.gui.themes.catppuccin.widgets.settings.WCatppuccinLongEdit;
 import net.minecraft.client.resources.language.I18n;
+//? }
 
 public class CatppuccinSettingsWidgetFactory extends SettingsWidgetFactory {
     private static final SettingColor WHITE = new SettingColor();
@@ -97,8 +101,11 @@ public class CatppuccinSettingsWidgetFactory extends SettingsWidgetFactory {
         factories.put(FontFaceSetting.class, (table, setting) -> fontW(table, (FontFaceSetting) setting));
         factories.put(Vector3dSetting.class, (table, setting) -> vector3dW(table, (Vector3dSetting) setting));
 
-        //? if >= 21.1.2
+        //? if >=21.1.2
         factories.put(FileSetting.class, (table, setting) -> fileW(table, (FileSetting) setting));
+
+        //? if >=26.2
+        factories.put(LongSetting.class, (table, setting) -> longW(table, (LongSetting) setting));
     }
 
     // Spacing
@@ -243,6 +250,22 @@ public class CatppuccinSettingsWidgetFactory extends SettingsWidgetFactory {
             if (!setting.set(edit.get())) edit.set(setting.get());
         };
     }
+
+    //? if >=26.2 {
+    private void longW(WTable table, LongSetting setting) {
+        WHorizontalList list = table.add(theme.horizontalList()).expandX().widget();
+
+        title(list, setting).padLeft(theme.pad());
+
+        WCatppuccinLongEdit edit = list.add(theme.catppuccinLongEdit(setting.title, setting.get(), setting.min, setting.max)).expandX().widget();
+
+        edit.action = () -> {
+            if (!setting.set(edit.get())) edit.set(setting.get());
+        };
+
+        reset(list, setting, () -> edit.set(setting.get()), () -> list.mouseOver);
+    }
+    //?}
 
     private void doubleW(WTable table, DoubleSetting setting) {
         WCatppuccinDoubleEdit edit = table.add(theme.catppuccinDoubleEdit(setting)).expandX().widget();

@@ -69,6 +69,9 @@ import java.util.function.Supplier;
 import static meteordevelopment.meteorclient.MeteorClient.mc;
 import net.minecraft.util.Util;
 
+//? if >=26.2
+import me.pindour.catppuccin.gui.themes.catppuccin.widgets.settings.WCatppuccinLongEdit;
+
 public class CatppuccinGuiTheme extends GuiTheme {
     private final Map<CatppuccinColor, Color> colorCache;
 
@@ -447,6 +450,10 @@ public class CatppuccinGuiTheme extends GuiTheme {
         return textBox(text, placeholder, title, pad(), filter, renderer);
     }
 
+    public WTextBox textBox(String text, String title, CharFilter filter) {
+        return textBox(text, null, title, pad(), filter, null);
+    }
+
     public WTextBox textBox(String text, CharFilter filter, double padding) {
         return textBox(text, null, "", padding, filter, null);
     }
@@ -570,6 +577,12 @@ public class CatppuccinGuiTheme extends GuiTheme {
     public WCatppuccinIntEdit catppuccinIntEdit(IntSetting setting) {
         return w(new WCatppuccinIntEdit(setting));
     }
+
+    //? if >=26.2 {
+    public WCatppuccinLongEdit catppuccinLongEdit(String title, long value, long min, long max) {
+        return w(new WCatppuccinLongEdit(title, value, min, max));
+    }
+    //? }
 
     public WCatppuccinDoubleEdit catppuccinDoubleEdit(String title, String description, double value, double min, double max, int decimalPlaces, double sliderMin, double sliderMax, boolean noSlider) {
         return w(new WCatppuccinDoubleEdit(title, description, null, value, min, max, decimalPlaces, sliderMin, sliderMax, noSlider));
