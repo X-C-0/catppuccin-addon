@@ -26,8 +26,12 @@ public class WCatppuccinColorPicker extends WColorPicker implements CatppuccinWi
                     s,
                     s,
                     overlayTexture,
-                    theme().textColor()
+                    contrastColorFor(color)
             );
         }
+    }
+
+    private Color contrastColorFor(Color color) {
+        return ColorUtils.luma(color) >= 200 ? theme().surface2Color() : theme().textColor();
     }
 }
