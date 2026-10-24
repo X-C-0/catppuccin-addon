@@ -46,3 +46,8 @@ deps.meteor_version = "26.1.2-SNAPSHOT"
 mc.version = "26.2"
 mc.targets = "26.2"
 deps.meteor_version = "26.2-SNAPSHOT"
+
+["26.3"]
+mc.version = "26.3"
+mc.targets = "26.3"
+deps.meteor_version = "26.3-SNAPSHOT"
