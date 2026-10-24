@@ -42,6 +42,10 @@ stonecutter parameters {
             replace("context.verticalLine", "context.vLine")
             replace("context.horizontalLine", "context.hLine")
         }
+        string(current.parsed <= "1.21.4") {
+            // Window
+            replace("mc.getWindow().handle()", "mc.getWindow().getWindow()")
+        }
         string(current.parsed <= "1.21.10") {
             // Identifier
             replace("Identifier", "ResourceLocation")

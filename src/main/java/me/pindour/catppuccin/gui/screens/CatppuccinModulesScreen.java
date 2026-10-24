@@ -28,11 +28,15 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.mojang.blaze3d.platform.InputConstants.KEY_F;
+import static com.mojang.blaze3d.platform.InputConstants.MOD_CONTROL;
 import static meteordevelopment.meteorclient.MeteorClient.mc;
 import static meteordevelopment.meteorclient.utils.Utils.getWindowHeight;
 import static meteordevelopment.meteorclient.utils.Utils.getWindowWidth;
-import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.glfw.GLFW.GLFW_MOD_CONTROL;
+//? if >=1.21.10
+import static com.mojang.blaze3d.platform.InputConstants.MOD_SUPER;
+//? if <=1.21.4
+//import static org.lwjgl.glfw.GLFW.GLFW_MOD_SUPER;
 
 import net.minecraft.util.Util;
 
@@ -114,9 +118,15 @@ public class CatppuccinModulesScreen extends TabScreen {
         int modifiers = input.modifiers();
         //? }
 
-        boolean control = Util.getPlatform() == Util.OS.OSX ? modifiers == GLFW_MOD_SUPER : modifiers == GLFW_MOD_CONTROL;
+        //? if >=1.21.10 {
+        int commandModifier = MOD_SUPER;
+        //? } else {
+        /*int commandModifier = GLFW_MOD_SUPER;
+        *///? }
 
-        if (control && keyCode == GLFW_KEY_F) {
+        boolean control = Util.getPlatform() == Util.OS.OSX ? modifiers == commandModifier : modifiers == MOD_CONTROL;
+
+        if (control && keyCode == KEY_F) {
             mc.gui.setScreen(new CatppuccinSearchScreen(theme));
             return true;
         }

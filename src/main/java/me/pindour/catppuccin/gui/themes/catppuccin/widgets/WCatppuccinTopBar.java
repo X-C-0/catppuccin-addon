@@ -10,8 +10,11 @@ import meteordevelopment.meteorclient.gui.tabs.Tabs;
 import meteordevelopment.meteorclient.gui.widgets.WTopBar;
 import meteordevelopment.meteorclient.utils.render.color.Color;
 
+//? if >=26.3
+import static com.mojang.blaze3d.platform.InputConstants.grabMouse;
 import static meteordevelopment.meteorclient.MeteorClient.mc;
-import static org.lwjgl.glfw.GLFW.glfwSetCursorPos;
+//? if <=26.2
+//import static org.lwjgl.glfw.GLFW.glfwSetCursorPos;
 
 /**
  * Singleton-like top bar widget. Kept persistent across screen switches
@@ -70,15 +73,11 @@ public class WCatppuccinTopBar extends WTopBar implements CatppuccinWidget {
 
         tab.openScreen(theme());
 
-        glfwSetCursorPos(
-                //? if <=1.21.4 {
-                /*mc.getWindow().getWindow(),
-                *///? } else {
-                mc.getWindow().handle(),
-                //? }
-                mouseX,
-                mouseY
-        );
+        //? if >=26.3 {
+        grabMouse(mc.getWindow(), mouseX, mouseY);
+        //? } else {
+        /*glfwSetCursorPos(mc.getWindow().handle(), mouseX, mouseY);
+        *///? }
     }
 
     @Override

@@ -17,9 +17,9 @@ import meteordevelopment.meteorclient.utils.render.color.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.mojang.blaze3d.platform.InputConstants.MOUSE_BUTTON_LEFT;
+import static com.mojang.blaze3d.platform.InputConstants.MOUSE_BUTTON_RIGHT;
 import static meteordevelopment.meteorclient.MeteorClient.mc;
-import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
-import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_RIGHT;
 
 //? if >=1.21.4
 import meteordevelopment.meteorclient.systems.config.Config;
@@ -81,10 +81,10 @@ public class WCatppuccinModule extends WPressable implements CatppuccinWidget {
 
     @Override
     protected void onPressed(int button) {
-        if (button == GLFW_MOUSE_BUTTON_LEFT)
+        if (button == MOUSE_BUTTON_LEFT)
             module.toggle();
 
-        else if (button == GLFW_MOUSE_BUTTON_RIGHT)
+        else if (button == MOUSE_BUTTON_RIGHT)
             mc.gui.setScreen(theme.moduleScreen(module));
     }
 
