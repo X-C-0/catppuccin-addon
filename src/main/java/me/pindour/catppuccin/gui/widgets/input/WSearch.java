@@ -77,7 +77,9 @@ public abstract class WSearch extends WVerticalList {
             view = addDirect(theme.view()).expandX().pad(theme.scale(8)).widget();
             view.hasScrollBar = false;
             view.spacing = 0;
-            view.maxHeight = (Utils.getWindowHeight() / 3.0) * 2;
+            // Leave room for the header, the container padding and the bottom edge,
+            // which the margin and this cap alone do not account for.
+            view.maxHeight = Utils.getWindowHeight() / 2.0;
         }
 
         @Override
