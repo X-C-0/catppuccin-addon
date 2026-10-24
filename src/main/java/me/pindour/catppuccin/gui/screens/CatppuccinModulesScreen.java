@@ -124,7 +124,11 @@ public class CatppuccinModulesScreen extends TabScreen {
         /*int commandModifier = GLFW_MOD_SUPER;
         *///? }
 
-        boolean control = Util.getPlatform() == Util.OS.OSX ? modifiers == commandModifier : modifiers == MOD_CONTROL;
+        // Modifiers are single flags up to 26.2 and masks from 26.3 (for example
+        // MOD_CONTROL covers both control keys), so test the bit instead.
+        boolean control = Util.getPlatform() == Util.OS.OSX
+                ? (modifiers & commandModifier) != 0
+                : (modifiers & MOD_CONTROL) != 0;
 
         if (control && keyCode == KEY_F) {
             mc.gui.setScreen(new CatppuccinSearchScreen(theme));
