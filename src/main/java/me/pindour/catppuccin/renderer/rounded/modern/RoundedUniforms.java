@@ -1,13 +1,19 @@
 package me.pindour.catppuccin.renderer.rounded.modern;
 
 //? if >=1.21.5 {
-import com.mojang.blaze3d.buffers.GpuBufferSlice;
+import com.mojang.renderpearl.api.buffers.GpuBufferSlice;
 import com.mojang.blaze3d.buffers.Std140Builder;
 import com.mojang.blaze3d.buffers.Std140SizeCalculator;
 import me.pindour.catppuccin.api.render.style.Outline;
 import me.pindour.catppuccin.api.render.style.Shadow;
 import me.pindour.catppuccin.renderer.CatppuccinRenderer;
-import net.minecraft.client.renderer.DynamicUniformStorage;
+//? if >=26.3 {
+import com.mojang.renderpearl.api.buffers.GpuBuffer;
+import net.minecraft.client.renderer.DynamicGpuDataStorage;
+import net.minecraft.client.renderer.DynamicGpuDataStorageMapped;
+//? } else {
+/*import net.minecraft.client.renderer.DynamicUniformStorage;
+*///? }
 import meteordevelopment.meteorclient.utils.render.color.Color;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
@@ -32,10 +38,17 @@ public class RoundedUniforms {
             .get();
 
     private static final RoundedRectData ROUNDED_DATA = new RoundedRectData();
-    private static final DynamicUniformStorage<RoundedRectData> ROUNDED_STORAGE = new DynamicUniformStorage<>("Catppuccin - Rounded UBO", ROUNDED_DATA_SIZE, 16);
+    //? if >=26.3 {
+    private static final DynamicGpuDataStorage<RoundedRectData> ROUNDED_STORAGE = new DynamicGpuDataStorageMapped<>("Catppuccin - Rounded UBO", ROUNDED_DATA_SIZE, GpuBuffer.USAGE_UNIFORM, 16);
+    //? } else {
+    /*private static final DynamicUniformStorage<RoundedRectData> ROUNDED_STORAGE = new DynamicUniformStorage<>("Catppuccin - Rounded UBO", ROUNDED_DATA_SIZE, 16);
+    *///? }
 
     public static GpuBufferSlice getUniformStorage() {
-        return ROUNDED_STORAGE.writeUniform(ROUNDED_DATA);
+        //? if >=26.3
+        return ROUNDED_STORAGE.writeData(ROUNDED_DATA);
+        //? if <=26.2
+        //return ROUNDED_STORAGE.writeUniform(ROUNDED_DATA);
     }
 
     public static void flipFrame() {
@@ -78,7 +91,11 @@ public class RoundedUniforms {
         target.set(color.r / 255f, color.g / 255f, color.b / 255f, color.a / 255f);
     }
 
-    private static final class RoundedRectData implements DynamicUniformStorage.DynamicUniform {
+    //? if >=26.3 {
+    private static final class RoundedRectData implements DynamicGpuDataStorage.DynamicGpuData {
+    //? } else {
+    /*private static final class RoundedRectData implements DynamicUniformStorage.DynamicUniform {
+    *///? }
         private final Vector4f fillColor = new Vector4f();
         private final Vector4f borderColor = new Vector4f();
         private final Vector2f borderData = new Vector2f();

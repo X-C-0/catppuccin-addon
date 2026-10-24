@@ -14,6 +14,12 @@ tasks.register("buildAllAndCollect") {
 
 stonecutter parameters {
     replacements {
+        string(current.parsed < "26.3") {
+            // RenderPearl
+            replace("com.mojang.renderpearl.api.pipeline.UniformType", "com.mojang.blaze3d.shaders.UniformType")
+            replace("com.mojang.renderpearl.api.pipeline.PrimitiveTopology", "com.mojang.blaze3d.PrimitiveTopology")
+            replace("com.mojang.renderpearl.api.", "com.mojang.blaze3d.")
+        }
         string(current.parsed < "26.2") {
             // Screen
             replace("mc.gui.screen()", "mc.screen")
