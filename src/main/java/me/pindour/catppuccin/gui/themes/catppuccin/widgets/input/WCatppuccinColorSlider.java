@@ -13,6 +13,10 @@ public class WCatppuccinColorSlider extends WCatppuccinSlider implements Catppuc
         this.colors = colors;
     }
 
+    public void setSecondColor(Color color) {
+        colors[1] = color;
+    }
+
     @Override
     protected void onRender(GuiRenderer renderer, double mouseX, double mouseY, double delta) {
         renderGradientBar(renderer);

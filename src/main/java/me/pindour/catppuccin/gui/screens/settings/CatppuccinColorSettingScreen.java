@@ -17,6 +17,7 @@ import me.pindour.catppuccin.utils.ColorUtils;
 import meteordevelopment.meteorclient.gui.GuiTheme;
 import meteordevelopment.meteorclient.gui.WidgetScreen;
 import meteordevelopment.meteorclient.gui.WindowScreen;
+import meteordevelopment.meteorclient.gui.renderer.GuiRenderer;
 import meteordevelopment.meteorclient.gui.widgets.WLabel;
 import meteordevelopment.meteorclient.gui.widgets.containers.WContainer;
 import meteordevelopment.meteorclient.gui.widgets.containers.WHorizontalList;
@@ -59,11 +60,6 @@ public class CatppuccinColorSettingScreen extends WindowScreen {
     private WCatppuccinColorSlider valueSlider;
     private WCatppuccinColorSlider opacitySlider;
     private WCatppuccinColorSlider linkOpacitySlider;
-
-    private Color[] saturationColors;
-    private Color[] valueColors;
-    private Color[] opacityColors;
-    private Color[] linkOpacityColors;
 
     public CatppuccinColorSettingScreen(GuiTheme theme, ColorSetting setting) {
         super(theme, setting.title);
@@ -111,25 +107,22 @@ public class CatppuccinColorSettingScreen extends WindowScreen {
         hueSlider.set(ColorUtils.hueFromColor(setting.get()));
 
         // Saturation
-        saturationColors = new Color[] {
+        saturationSlider = theme.colorSlider(0, 0, 100, new Color[] {
                 WHITE, ColorUtils.hueToColor(hueSlider.get())
-        };
-        saturationSlider = theme.colorSlider(0, 0, 100, saturationColors);
+        });
         addColorSlider(sliderList, "Saturation", "%", saturationSlider, this::hsvChanged);
 
         // Value
-        valueColors = new Color[] {
-                BLACK, saturationColors[1]
-        };
-        valueSlider = theme.colorSlider(0, 0, 100, valueColors);
+        valueSlider = theme.colorSlider(0, 0, 100, new Color[] {
+                BLACK, ColorUtils.hueToColor(hueSlider.get())
+        });
         addColorSlider(sliderList, "Value", "%", valueSlider, this::hsvChanged);
 
         saturationValueFromColor(setting.get());
 
         // Opacity
         SettingColor c = setting.get();
-        opacityColors = opacityGradient(c);
-        opacitySlider = theme.colorSlider(ColorUtils.alphaToPercent(c.a), 0, 100, opacityColors);
+        opacitySlider = theme.colorSlider(ColorUtils.alphaToPercent(c.a), 0, 100, opacityGradient(c));
         addColorSlider(sliderList, "Opacity", "%", opacitySlider, this::opacityChanged);
     }
 
@@ -218,8 +211,7 @@ public class CatppuccinColorSettingScreen extends WindowScreen {
         int opacity = link != null ? link.opacity() : 255;
 
         SettingColor c = setting.get();
-        linkOpacityColors = opacityGradient(c);
-        linkOpacitySlider = theme.colorSlider(ColorUtils.alphaToPercent(opacity), 0, 100, linkOpacityColors);
+        linkOpacitySlider = theme.colorSlider(ColorUtils.alphaToPercent(opacity), 0, 100, opacityGradient(c));
         addColorSlider(list, "Opacity", "%", linkOpacitySlider, this::linkOpacityChanged);
     }
 
@@ -243,6 +235,7 @@ public class CatppuccinColorSettingScreen extends WindowScreen {
 
         WButton resetButton = previewHeader.add(theme.button(CatppuccinBuiltinIcons.RESET.texture())).widget();
         resetButton.action = () -> {
+            ColorLinkRegistry.unlink(setting);
             setting.reset();
             setFromSetting();
         };
@@ -260,12 +253,8 @@ public class CatppuccinColorSettingScreen extends WindowScreen {
     }
 
     private void addColorSlider(WVerticalList list, String title, String suffix, WCatppuccinColorSlider slider, Runnable onValueChanged) {
-        WSliderContainer container = list.add(new WSliderContainer(slider, title, suffix)).expandX().widget();
-
-        slider.action = () -> {
-            onValueChanged.run();
-            container.updateValueText();
-        };
+        slider.action = onValueChanged;
+        list.add(new WSliderContainer(slider, title, suffix)).expandX();
     }
 
     private void setFromSetting() {
@@ -291,7 +280,7 @@ public class CatppuccinColorSettingScreen extends WindowScreen {
         updateSliderGradients();
         saturationValueFromColor(c);
 
-        opacityColors[1] = ColorUtils.withAlpha(c, 255);
+        opacitySlider.setSecondColor(ColorUtils.withAlpha(c, 255));
         opacitySlider.set(ColorUtils.alphaToPercent(c.a));
     }
 
@@ -300,7 +289,7 @@ public class CatppuccinColorSettingScreen extends WindowScreen {
 
         linkGrid.select(link != null ? link.color() : null);
 
-        linkOpacityColors[1] = ColorUtils.withAlpha(c, 255);
+        linkOpacitySlider.setSecondColor(ColorUtils.withAlpha(c, 255));
         linkOpacitySlider.set(ColorUtils.alphaToPercent(link != null ? link.opacity() : 255));
     }
 
@@ -313,6 +302,8 @@ public class CatppuccinColorSettingScreen extends WindowScreen {
         Color c = setting.get();
         ColorUtils.hsvToRgb(c, hueSlider.get(), saturationSlider.get() / 100.0, valueSlider.get() / 100.0);
         applyEditedColor();
+
+        if (paletteGrid != null) paletteGrid.selectMatching(setting.get());
     }
 
     private void opacityChanged() {
@@ -326,18 +317,18 @@ public class CatppuccinColorSettingScreen extends WindowScreen {
 
         link.setOpacity(ColorUtils.percentToAlpha(linkOpacitySlider.get()));
         link.apply(setting);
-        applyColor(setting.get(), linkOpacityColors);
+        linkOpacitySlider.setSecondColor(ColorUtils.withAlpha(setting.get(), 255));
+        applyColor(setting.get());
     }
 
     private void applyEditedColor() {
         ColorLinkRegistry.unlink(setting);
-        applyColor(setting.get(), opacityColors);
+        opacitySlider.setSecondColor(ColorUtils.withAlpha(setting.get(), 255));
+        applyColor(setting.get());
     }
 
-    private void applyColor(SettingColor c, Color[] gradientColors) {
+    private void applyColor(SettingColor c) {
         c.validate();
-
-        gradientColors[1] = ColorUtils.withAlpha(c, 255);
 
         displayQuad.color.set(c);
         setting.onChanged();
@@ -345,8 +336,8 @@ public class CatppuccinColorSettingScreen extends WindowScreen {
 
     private void updateSliderGradients() {
         Color hueColor = ColorUtils.hueToColor(hueSlider.get());
-        saturationColors[1] = hueColor;
-        valueColors[1] = hueColor;
+        saturationSlider.setSecondColor(hueColor);
+        valueSlider.setSecondColor(hueColor);
     }
 
     private void saturationValueFromColor(Color c) {
@@ -411,8 +402,6 @@ public class CatppuccinColorSettingScreen extends WindowScreen {
         private final String title;
         private final String valueSuffix;
 
-        private WCatppuccinLabel valueLabel;
-
         public WSliderContainer(WCatppuccinColorSlider slider, String title, String valueSuffix) {
             this.slider = slider;
             this.title = title;
@@ -424,9 +413,10 @@ public class CatppuccinColorSettingScreen extends WindowScreen {
             spacing = 0;
 
             WHorizontalList titleList = add(theme.horizontalList()).expandX().widget();
+            WValueLabel valueLabel = new WValueLabel();
 
             titleList.add(theme.label(title));
-            valueLabel = (WCatppuccinLabel) titleList.add(theme.label(getValueFormatted())).expandX().right().widget();
+            titleList.add(valueLabel).expandX().right();
             valueLabel.textRight();
 
             add(slider).expandX();
@@ -436,8 +426,23 @@ public class CatppuccinColorSettingScreen extends WindowScreen {
             return (int) slider.get() + valueSuffix;
         }
 
-        public void updateValueText() {
-            valueLabel.set(RichText.of(getValueFormatted()));
+        private class WValueLabel extends WCatppuccinLabel {
+            private int lastValue = Integer.MIN_VALUE;
+
+            private WValueLabel() {
+                super(RichText.of(getValueFormatted()));
+            }
+
+            @Override
+            protected void onRender(GuiRenderer renderer, double mouseX, double mouseY, double delta) {
+                int value = (int) slider.get();
+                if (value != lastValue) {
+                    lastValue = value;
+                    set(RichText.of(getValueFormatted()));
+                }
+
+                super.onRender(renderer, mouseX, mouseY, delta);
+            }
         }
     }
 }
