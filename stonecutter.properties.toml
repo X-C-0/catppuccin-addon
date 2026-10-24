@@ -9,7 +9,7 @@ mc.version = "[VERSIONED]"
 mc.targets = "[VERSIONED]"
 
 # Loom
-loomx.loom_version = "1.17-SNAPSHOT"
+loomx.loom_version = "1.19-SNAPSHOT"
 loomx.loom_remap_plugin = "net.fabricmc.fabric-loom-remap"
 loomx.loom_unobf_plugin = "net.fabricmc.fabric-loom"
 
