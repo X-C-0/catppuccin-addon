@@ -1,28 +1,28 @@
 package me.pindour.catppuccin.renderer.rounded.modern;
 
 //? if >=1.21.5 {
-import com.mojang.blaze3d.pipeline.BlendFunction;
-import com.mojang.blaze3d.pipeline.RenderPipeline;
+import com.mojang.renderpearl.api.pipeline.BlendFunction;
+import com.mojang.renderpearl.api.pipeline.RenderPipeline;
 import me.pindour.catppuccin.CatppuccinAddon;
 import meteordevelopment.meteorclient.renderer.ExtendedRenderPipelineBuilder;
 import meteordevelopment.meteorclient.renderer.MeteorRenderPipelines;
 import meteordevelopment.meteorclient.renderer.MeteorVertexFormats;
-import com.mojang.blaze3d.shaders.UniformType;
+import com.mojang.renderpearl.api.pipeline.UniformType;
 
 import java.lang.reflect.Method;
 
 //? if >=26.1 {
-import com.mojang.blaze3d.pipeline.ColorTargetState;
+import com.mojang.renderpearl.api.pipeline.ColorTargetState;
 import java.util.Optional;
 //? } else {
 /*import com.mojang.blaze3d.platform.DepthTestFunction;
 *///? }
 
 //? if >=26.2 {
-import com.mojang.blaze3d.PrimitiveTopology;
-import com.mojang.blaze3d.pipeline.BindGroupLayout;
+import com.mojang.renderpearl.api.pipeline.PrimitiveTopology;
+import com.mojang.renderpearl.api.pipeline.BindGroupLayout;
 //? } else {
-/*import com.mojang.blaze3d.vertex.VertexFormat;
+/*import com.mojang.renderpearl.api.vertex.VertexFormat;
 *///?}
 
 public class CatppuccinRenderPipelines {

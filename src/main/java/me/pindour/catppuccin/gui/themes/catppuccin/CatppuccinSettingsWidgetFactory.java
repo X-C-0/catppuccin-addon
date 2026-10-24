@@ -52,8 +52,12 @@ import static me.pindour.catppuccin.utils.WidgetUtils.reset;
 import static meteordevelopment.meteorclient.MeteorClient.mc;
 
 //? if >=21.1.2 {
-import org.lwjgl.util.tinyfd.TinyFileDialogs;
 import java.io.File;
+//? if >=26.3 {
+import meteordevelopment.meteorclient.utils.misc.FileDialogs;
+//? } else {
+/*import org.lwjgl.util.tinyfd.TinyFileDialogs;
+*///? }
 //? }
 
 //? if >=26.2 {
@@ -702,7 +706,13 @@ public class CatppuccinSettingsWidgetFactory extends SettingsWidgetFactory {
         WLabel fileName = list.add(theme.label((setting.get() != null && setting.get().exists()) ? setting.get().getName() : "No file selected.")).widget();
 
         selectFile.action = () -> {
-            String path = TinyFileDialogs.tinyfd_openFileDialog(
+            //? if >=26.3 {
+            FileDialogs.openFile(setting.filter, file -> {
+                setting.set(file);
+                fileName.set(setting.get().getName());
+            });
+            //? } else {
+            /*String path = TinyFileDialogs.tinyfd_openFileDialog(
                     "Select File",
                     null,
                     setting.filters,
@@ -714,6 +724,7 @@ public class CatppuccinSettingsWidgetFactory extends SettingsWidgetFactory {
                 setting.set(new File(path));
                 fileName.set(setting.get().getName());
             }
+            *///? }
         };
 
         Runnable action = () -> fileName.set(

@@ -1,9 +1,18 @@
 #version 330 core
+//? if >=26.3
+#extension GL_ARB_separate_shader_objects : require
 
-out vec4 fragColor;
+//? if >=26.3 {
+layout(location = 0) out vec4 fragColor;
+
+layout(location = 0) in vec2 v_LocalPos;
+layout(location = 1) in vec2 v_ScreenPos;
+//? } else {
+/*out vec4 fragColor;
 
 in vec2 v_LocalPos;
 in vec2 v_ScreenPos;
+*///? }
 
 //? if <=1.21.4 {
 /*uniform vec4 u_FillColor;

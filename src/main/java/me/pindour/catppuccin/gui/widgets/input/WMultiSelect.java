@@ -18,7 +18,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
+import static com.mojang.blaze3d.platform.InputConstants.MOUSE_BUTTON_LEFT;
 
 //? if >=1.21.9
 import net.minecraft.client.input.MouseButtonEvent;
@@ -268,9 +268,9 @@ public abstract class WMultiSelect<T> extends WVerticalList {
         public boolean onMouseClicked(MouseButtonEvent click, boolean used) {
             if (mouseOver
                 //? if >=1.21.9
-                && click.button() == GLFW_MOUSE_BUTTON_LEFT
+                && click.button() == MOUSE_BUTTON_LEFT
                 //? if <1.21.9
-                //&& button == GLFW_MOUSE_BUTTON_LEFT
+                //&& button == MOUSE_BUTTON_LEFT
                 && !used
             ) {
                 onClick();
@@ -317,9 +317,9 @@ public abstract class WMultiSelect<T> extends WVerticalList {
         public boolean onMouseClicked(MouseButtonEvent click, boolean used) {
             if (mouseOver
                 //? if >=1.21.9
-                && click.button() == GLFW_MOUSE_BUTTON_LEFT
+                && click.button() == MOUSE_BUTTON_LEFT
                 //? if <=1.21.8
-                //&& button == GLFW_MOUSE_BUTTON_LEFT
+                //&& button == MOUSE_BUTTON_LEFT
                 && !used
                 && !checkbox.mouseOver
             ) {

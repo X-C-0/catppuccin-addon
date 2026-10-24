@@ -1,4 +1,6 @@
 #version 330 core
+//? if >=26.3
+#extension GL_ARB_separate_shader_objects : require
 
 layout(location = 0) in vec2 Position;
 layout(location = 1) in vec4 Color;
@@ -29,8 +31,13 @@ layout(std140) uniform RoundedRectData {
 };
 //? }
 
-out vec2 v_LocalPos;
+//? if >=26.3 {
+layout(location = 0) out vec2 v_LocalPos;
+layout(location = 1) out vec2 v_ScreenPos;
+//? } else {
+/*out vec2 v_LocalPos;
 out vec2 v_ScreenPos;
+*///? }
 
 void main() {
     vec4 worldPos = u_ModelView * vec4(Position, 0.0, 1.0);

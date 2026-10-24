@@ -2,7 +2,7 @@ plugins {
     id("dev.kikugie.stonecutter")
 }
 
-stonecutter active "26.2" /* [SC] DO NOT EDIT */
+stonecutter active "26.3" /* [SC] DO NOT EDIT */
 
 tasks.register("buildAllAndCollect") {
     group = "build"
@@ -14,6 +14,12 @@ tasks.register("buildAllAndCollect") {
 
 stonecutter parameters {
     replacements {
+        string(current.parsed < "26.3") {
+            // RenderPearl
+            replace("com.mojang.renderpearl.api.pipeline.UniformType", "com.mojang.blaze3d.shaders.UniformType")
+            replace("com.mojang.renderpearl.api.pipeline.PrimitiveTopology", "com.mojang.blaze3d.PrimitiveTopology")
+            replace("com.mojang.renderpearl.api.", "com.mojang.blaze3d.")
+        }
         string(current.parsed < "26.2") {
             // Screen
             replace("mc.gui.screen()", "mc.screen")
@@ -35,6 +41,10 @@ stonecutter parameters {
             replace("render(GuiGraphicsExtractor", "render(GuiGraphics")
             replace("context.verticalLine", "context.vLine")
             replace("context.horizontalLine", "context.hLine")
+        }
+        string(current.parsed <= "1.21.4") {
+            // Window
+            replace("mc.getWindow().handle()", "mc.getWindow().getWindow()")
         }
         string(current.parsed <= "1.21.10") {
             // Identifier

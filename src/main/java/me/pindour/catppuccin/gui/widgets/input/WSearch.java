@@ -14,9 +14,9 @@ import meteordevelopment.meteorclient.utils.Utils;
 
 import java.util.List;
 
+import static com.mojang.blaze3d.platform.InputConstants.MOUSE_BUTTON_LEFT;
+import static com.mojang.blaze3d.platform.InputConstants.MOUSE_BUTTON_RIGHT;
 import static meteordevelopment.meteorclient.MeteorClient.mc;
-import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
-import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_RIGHT;
 
 //? >=1.21.5
 import net.minecraft.client.input.MouseButtonEvent;
@@ -108,7 +108,7 @@ public abstract class WSearch extends WVerticalList {
             //? >=1.21.5
             int button = click.button();
 
-            if (mouseOver && (button == GLFW_MOUSE_BUTTON_LEFT || button == GLFW_MOUSE_BUTTON_RIGHT))
+            if (mouseOver && (button == MOUSE_BUTTON_LEFT || button == MOUSE_BUTTON_RIGHT))
                 pressed = true;
 
             return pressed;
@@ -120,13 +120,13 @@ public abstract class WSearch extends WVerticalList {
                 //? >=1.21.5
                 int button = click.button();
 
-                if (button == GLFW_MOUSE_BUTTON_LEFT) {
+                if (button == MOUSE_BUTTON_LEFT) {
                     if (result instanceof ModuleSearchResult r) {
                         r.module().toggle();
                     }
                 }
 
-                if (button == GLFW_MOUSE_BUTTON_RIGHT) {
+                if (button == MOUSE_BUTTON_RIGHT) {
                     switch (result) {
                         case ModuleSearchResult r -> mc.gui.setScreen(theme.moduleScreen(r.module()));
                         case SettingSearchResult r -> mc.gui.setScreen(theme.moduleScreen(r.setting().module));
