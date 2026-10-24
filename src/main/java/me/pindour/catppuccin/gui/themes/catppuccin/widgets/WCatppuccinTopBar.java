@@ -10,9 +10,9 @@ import meteordevelopment.meteorclient.gui.tabs.Tabs;
 import meteordevelopment.meteorclient.gui.widgets.WTopBar;
 import meteordevelopment.meteorclient.utils.render.color.Color;
 
-//? if >=26.3
-import static com.mojang.blaze3d.platform.InputConstants.grabMouse;
 import static meteordevelopment.meteorclient.MeteorClient.mc;
+//? if >=26.3
+import static org.lwjgl.sdl.SDLMouse.SDL_WarpMouseInWindow;
 //? if <=26.2
 //import static org.lwjgl.glfw.GLFW.glfwSetCursorPos;
 
@@ -74,7 +74,7 @@ public class WCatppuccinTopBar extends WTopBar implements CatppuccinWidget {
         tab.openScreen(theme());
 
         //? if >=26.3 {
-        grabMouse(mc.getWindow(), mouseX, mouseY);
+        SDL_WarpMouseInWindow(mc.getWindow().handle(), (float) mouseX, (float) mouseY);
         //? } else {
         /*glfwSetCursorPos(mc.getWindow().handle(), mouseX, mouseY);
         *///? }
