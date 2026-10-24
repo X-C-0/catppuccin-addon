@@ -15,7 +15,7 @@ public class CatppuccinSearchScreen extends WidgetScreen {
 
     @Override
     public void initWidgets() {
-        double margin = Utils.getWindowHeight() / 8.0;
+        double margin = Utils.getWindowHeight() / 10.0;
         add(theme.search()).marginTop(margin).top().centerX();
     }
 }
