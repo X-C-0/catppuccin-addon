@@ -51,7 +51,7 @@ import java.util.function.Consumer;
 import static me.pindour.catppuccin.utils.WidgetUtils.reset;
 import static meteordevelopment.meteorclient.MeteorClient.mc;
 
-//? if >=21.1.2 {
+//? if >=26.1 {
 import java.io.File;
 //? if >=26.3 {
 import meteordevelopment.meteorclient.utils.misc.FileDialogs;
@@ -105,7 +105,7 @@ public class CatppuccinSettingsWidgetFactory extends SettingsWidgetFactory {
         factories.put(FontFaceSetting.class, (table, setting) -> fontW(table, (FontFaceSetting) setting));
         factories.put(Vector3dSetting.class, (table, setting) -> vector3dW(table, (Vector3dSetting) setting));
 
-        //? if >=21.1.2
+        //? if >=26.1
         factories.put(FileSetting.class, (table, setting) -> fileW(table, (FileSetting) setting));
 
         //? if >=26.2
@@ -324,7 +324,7 @@ public class CatppuccinSettingsWidgetFactory extends SettingsWidgetFactory {
         dropdown.action = () -> setting.set(dropdown.get());
         dropdown.tooltip = setting.description;
 
-        reset(table, setting, () -> dropdown.set(setting.get()), () -> list.mouseOver);
+        reset(list, setting, () -> dropdown.set(setting.get()), () -> list.mouseOver);
     }
 
     private void accentColorW(WTable table, EnumSetting<CatppuccinAccentColor> setting) {
@@ -644,7 +644,7 @@ public class CatppuccinSettingsWidgetFactory extends SettingsWidgetFactory {
                 );
 
                 set.set(setting.get().get(_i));
-                mc.gui.setScreen(new CatppuccinColorSettingScreen(theme, set));
+                mc.gui.setScreen(new CatppuccinColorSettingScreen(theme, set, false));
             };
 
             list.add(theme.label(RichText.of("Example Text").scale(TextScale.SMALL.get())).color(color)).expandX();
@@ -697,13 +697,14 @@ public class CatppuccinSettingsWidgetFactory extends SettingsWidgetFactory {
         return component;
     }
 
-    //? if >= 21.1.2 {
+    //? if >= 26.1 {
     private void fileW(WTable table, FileSetting setting) {
         WHorizontalList list = table.add(theme.horizontalList()).expandX().widget();
 
         WButton selectFile = list.add(theme.button("Select File")).widget();
 
-        WLabel fileName = list.add(theme.label((setting.get() != null && setting.get().exists()) ? setting.get().getName() : "No file selected.")).widget();
+        String name = (setting.get() != null && setting.get().exists()) ? setting.get().getName() : "No file selected.";
+        WLabel fileName = list.add(theme.label(name)).expandCellX().widget();
 
         selectFile.action = () -> {
             //? if >=26.3 {
@@ -733,7 +734,7 @@ public class CatppuccinSettingsWidgetFactory extends SettingsWidgetFactory {
                 : "No file selected."
         );
 
-        reset(table, setting, action, () -> list.mouseOver);
+        reset(list, setting, action, () -> list.mouseOver);
     }
     //? }
 

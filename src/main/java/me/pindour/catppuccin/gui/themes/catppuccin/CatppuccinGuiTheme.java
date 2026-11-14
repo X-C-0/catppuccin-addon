@@ -286,6 +286,7 @@ public class CatppuccinGuiTheme extends GuiTheme {
             .name("grid-size")
             .description("The size of the snapping grid.")
             .defaultValue(10)
+            .range(5, 500)
             .sliderRange(5, 50)
             .visible(snapModuleCategories::get)
             .build()
@@ -886,7 +887,7 @@ public class CatppuccinGuiTheme extends GuiTheme {
         double scaled = value * scale.get();
 
         if (Util.getPlatform() == Util.OS.OSX) {
-            scaled /= (double) mc.getWindow().getWidth() / mc.getWindow().getWidth();
+            scaled /= (double) mc.getWindow().getScreenWidth() / mc.getWindow().getWidth();
         }
 
         return scaled;

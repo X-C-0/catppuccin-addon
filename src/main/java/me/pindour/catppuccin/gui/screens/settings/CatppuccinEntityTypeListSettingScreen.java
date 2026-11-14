@@ -92,8 +92,8 @@ public class CatppuccinEntityTypeListSettingScreen extends WindowScreen {
                 .label(Names::get)
                 .isSelected(setting.get()::contains)
                 .onSelectionChange((entity, selected) -> {
-                    if (selected) setting.get().add(entity);
-                    else setting.get().remove(entity);
+                    boolean changed = selected ? setting.get().add(entity) : setting.get().remove(entity);
+                    if (changed) setting.onChanged();
                 });
 
         multiSelectView.add(multiSelect).padVertical(6).expandX();

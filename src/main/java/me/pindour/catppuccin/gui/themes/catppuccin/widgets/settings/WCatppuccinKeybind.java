@@ -8,9 +8,6 @@ import meteordevelopment.meteorclient.systems.modules.Modules;
 import meteordevelopment.meteorclient.utils.misc.Keybind;
 
 public class WCatppuccinKeybind extends WKeybind implements CatppuccinWidget {
-    public Runnable action;
-    public Runnable actionOnSet;
-
     private WCatppuccinButton button;
 
     private final String title;
@@ -83,6 +80,7 @@ public class WCatppuccinKeybind extends WKeybind implements CatppuccinWidget {
         if (Modules.get().isBinding()) {
             Modules.get().setModuleToBind(null);
         }
+        if (action != null) action.run();
     }
 
     private void refreshLabel() {

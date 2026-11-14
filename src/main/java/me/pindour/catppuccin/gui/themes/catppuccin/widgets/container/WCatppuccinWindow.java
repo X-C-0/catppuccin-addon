@@ -180,13 +180,13 @@ public class WCatppuccinWindow extends WWindow implements CatppuccinWidget {
 
     @Override
     public void setExpanded(boolean expanded) {
+        boolean changed = this.expanded != expanded;
         super.setExpanded(expanded);
 
-        if (animation != null)
-            animation.reverse();
+        if (!changed) return;
 
-        if (expanded && cornerAnimation != null)
-            cornerAnimation.finishedAt(Direction.FORWARDS);
+        if (animation != null) animation.reverse();
+        if (expanded) cornerAnimation.finishedAt(Direction.FORWARDS);
     }
 
     @Override

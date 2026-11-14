@@ -137,7 +137,10 @@ public class WCatppuccinSection extends WSection implements CatppuccinWidget {
 
     @Override
     public void setExpanded(boolean expanded) {
+        boolean changed = this.expanded != expanded;
         super.setExpanded(expanded);
+
+        if (!changed || animation == null) return;
 
         animation.reverse();
         if (expanded) cornerAnimation.finishedAt(Direction.FORWARDS);

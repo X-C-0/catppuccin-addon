@@ -73,7 +73,7 @@ public class WCatppuccinModule extends WPressable implements CatppuccinWidget {
     @Override
     protected void onCalculateSize() {
         double pad = pad();
-        if (titleWidth == 0) titleWidth = theme().textWidth(title);
+        titleWidth = theme().textWidth(title);
 
         width = pad + pad + titleWidth + pad;
         height = pad + theme.textHeight() + pad;

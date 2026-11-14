@@ -47,13 +47,17 @@ jobs:
 
       - name: Prepare Changelog
         id: prep
+        env:
+          BODY: ${{ github.event.release.body }}
         run: |
           if [ "${{ matrix.mc_version }}" == "${{ needs.prepare.outputs.latest_version }}" ]; then
-            echo "changelog<<EOF" >> $GITHUB_OUTPUT
-            echo "${{ github.event.release.body }}" >> $GITHUB_OUTPUT
-            echo "EOF" >> $GITHUB_OUTPUT
+            {
+              echo "changelog<<EOF"
+              printf '%s\n' "$BODY"
+              echo "EOF"
+            } >> "$GITHUB_OUTPUT"
           else
-            echo "changelog=" >> $GITHUB_OUTPUT
+            echo "changelog=" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Determine Dependencies

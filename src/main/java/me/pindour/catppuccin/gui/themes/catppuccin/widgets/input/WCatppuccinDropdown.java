@@ -23,6 +23,8 @@ public class WCatppuccinDropdown<T> extends WDropdown<T> implements CatppuccinWi
     private Animation hoverAnimation;
     private Animation indicatorAnimation;
 
+    private boolean expandedState;
+
     public WCatppuccinDropdown(String title, T[] values, T value) {
         super(values, value);
         titleText = RichText.of(title);
@@ -152,11 +154,19 @@ public class WCatppuccinDropdown<T> extends WDropdown<T> implements CatppuccinWi
         animProgress = -8008135; // Small hack to cancel out WDropdown scissors, so we can use our animation
 
         boolean render = super.render(renderer, mouseX, mouseY, delta);
+
+        if (expandedState != expanded) {
+            expandedState = expanded;
+            indicatorAnimation.reverse();
+        }
+
         double progress = indicatorAnimation.getProgress();
 
         if (!render && progress > 0) {
+            double scissorHeight = Math.min(root.height * progress, Utils.getWindowHeight() - root.y);
+
             renderer.absolutePost(() -> {
-                renderer.scissorStart(root.x, root.y, root.width, root.height * progress);
+                renderer.scissorStart(root.x, root.y, root.width, scissorHeight);
                 root.render(renderer, mouseX, mouseY, delta);
                 renderer.scissorEnd();
             });
@@ -168,22 +178,13 @@ public class WCatppuccinDropdown<T> extends WDropdown<T> implements CatppuccinWi
     @Override
     protected void onPressed(int button) {
         super.onPressed(button);
-        handlePressed();
+        valueText = RichText.of(getNameFor(value));
     }
 
     @Override
     public void set(T value) {
         super.set(value);
-
-        if (indicatorAnimation == null) return;
-
-        indicatorAnimation.reset();
-        handlePressed();
-    }
-
-    private void handlePressed() {
         valueText = RichText.of(getNameFor(value));
-        indicatorAnimation.reverse();
     }
 
     private String getNameFor(T value) {
@@ -264,7 +265,7 @@ public class WCatppuccinDropdown<T> extends WDropdown<T> implements CatppuccinWi
         @Override
         protected void onPressed(int button) {
             super.onPressed(button);
-            handlePressed();
+            valueText = RichText.of(getNameFor(value));
         }
     }
 }

@@ -172,7 +172,7 @@ public class CatppuccinModulesScreen extends TabScreen {
             int limit = Config.get().moduleSearchCount.get();
 
             // Modules
-            List<ModuleSearchResult> modules = SearchUtils.searchModules(text, 50);
+            List<ModuleSearchResult> modules = SearchUtils.searchModules(text);
 
             if (!modules.isEmpty()) {
                 WSection section = w.add(theme.section("Modules")).expandX().widget();

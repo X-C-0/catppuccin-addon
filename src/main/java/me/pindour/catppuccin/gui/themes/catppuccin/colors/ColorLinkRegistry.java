@@ -2,6 +2,7 @@ package me.pindour.catppuccin.gui.themes.catppuccin.colors;
 
 import meteordevelopment.meteorclient.settings.ColorSetting;
 import net.minecraft.nbt.CompoundTag;
+import me.pindour.catppuccin.CatppuccinAddon;
 
 import java.util.IdentityHashMap;
 import java.util.Map;
@@ -30,21 +31,26 @@ public class ColorLinkRegistry {
     }
 
     public static void linkFromTag(ColorSetting setting, CompoundTag settingTag) {
-        //? if <=1.21.4 {
-        /*CompoundTag linkTag = settingTag.get(KEY_LINK) instanceof CompoundTag tag ? tag : null;
-        *///? } else {
-        CompoundTag linkTag = settingTag.getCompound(KEY_LINK).orElse(null);
-        //? }
+        try {
+            //? if <=1.21.4 {
+            /*CompoundTag linkTag = settingTag.get(KEY_LINK) instanceof CompoundTag tag ? tag : null;
+            *///? } else {
+            CompoundTag linkTag = settingTag.getCompound(KEY_LINK).orElse(null);
+            //? }
 
-        ColorLink link = linkTag == null ? null : new ColorLink().fromTag(linkTag);
+            ColorLink link = linkTag == null ? null : new ColorLink().fromTag(linkTag);
 
-        if (link == null) {
+            if (link == null || !link.isValid()) {
+                links.remove(setting);
+                return;
+            }
+
+            links.put(setting, link);
+            link.apply(setting);
+        } catch (Exception e) {
             links.remove(setting);
-            return;
+            CatppuccinAddon.LOG.warn("Ignoring invalid color link for setting '{}'", setting.name, e);
         }
-
-        links.put(setting, link);
-        link.apply(setting);
     }
 
     public static void applyAll() {

@@ -54,7 +54,7 @@ dependencies {
 tasks {
     processResources {
         val propertyMap = mapOf(
-            "version" to minecraftVersion,
+            "version" to "${modVersion}+mc${minecraftVersion}",
             "mc_targets" to minecraftTargets
         )
 

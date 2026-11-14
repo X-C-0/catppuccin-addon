@@ -20,6 +20,6 @@ public abstract class ColorSettingMixin {
     @Inject(method = "save", at = @At("TAIL"))
     private void catppuccin$save(CompoundTag tag, CallbackInfoReturnable<CompoundTag> cir) {
         ColorLink link = ColorLinkRegistry.getLink((ColorSetting) (Object) this);
-        if (link != null) tag.put(ColorLinkRegistry.KEY_LINK, link.toTag());
+        if (link != null && link.isValid()) tag.put(ColorLinkRegistry.KEY_LINK, link.toTag());
     }
 }

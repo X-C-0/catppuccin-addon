@@ -49,6 +49,7 @@ public class CatppuccinColorSettingScreen extends WindowScreen {
 
     private final CatppuccinGuiTheme theme;
     private final ColorSetting setting;
+    private final boolean allowLinking;
 
     private WCatppuccinQuad displayQuad;
 
@@ -62,19 +63,24 @@ public class CatppuccinColorSettingScreen extends WindowScreen {
     private WCatppuccinColorSlider linkOpacitySlider;
 
     public CatppuccinColorSettingScreen(GuiTheme theme, ColorSetting setting) {
+        this(theme, setting, true);
+    }
+
+    public CatppuccinColorSettingScreen(GuiTheme theme, ColorSetting setting, boolean allowLinking) {
         super(theme, setting.title);
         this.theme = (CatppuccinGuiTheme) theme;
         this.setting = setting;
+        this.allowLinking = allowLinking;
     }
 
     @Override
     public void initWidgets() {
-        List<CatppuccinTab> tabs = new TabBuilder()
-                .tab("Custom color", this::buildCustomTab)
-                .tab("Link color", this::buildLinkTab)
-                .build();
+        TabBuilder builder = new TabBuilder().tab("Custom color", this::buildCustomTab);
+        if (allowLinking) builder.tab("Link color", this::buildLinkTab);
 
-        CatppuccinTab initialTab = ColorLinkRegistry.isLinked(setting) ? tabs.get(1) : tabs.get(0);
+        List<CatppuccinTab> tabs = builder.build();
+
+        CatppuccinTab initialTab = allowLinking && ColorLinkRegistry.isLinked(setting) ? tabs.get(1) : tabs.get(0);
 
         add(theme.tabView(tabs, initialTab)).centerX();
 

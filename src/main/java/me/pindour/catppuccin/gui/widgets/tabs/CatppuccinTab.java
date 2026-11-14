@@ -31,12 +31,4 @@ public class CatppuccinTab {
     public void build(WContainer content) {
         contentBuilder.accept(content);
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof CatppuccinTab other) {
-            return name.equalsIgnoreCase(other.name);
-        }
-        return false;
-    }
 }

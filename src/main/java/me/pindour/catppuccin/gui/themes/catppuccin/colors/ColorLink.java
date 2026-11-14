@@ -35,12 +35,14 @@ public class ColorLink implements ISerializable<ColorLink> {
     }
 
     public void apply(ColorSetting setting) {
-        if (GuiThemes.get() instanceof CatppuccinGuiTheme theme) {
-            if (color == null || setting == null) return;
+        if (!(GuiThemes.get() instanceof CatppuccinGuiTheme theme)) return;
+        if (color == null || setting == null) return;
 
-            Color finalColor = ColorUtils.withAlpha(theme.getColor(color), opacity);
-            setting.get().set(finalColor);
-        }
+        Color finalColor = ColorUtils.withAlpha(theme.getColor(color), opacity);
+        if (setting.get().getPacked() == finalColor.getPacked()) return;
+
+        setting.get().set(finalColor);
+        setting.onChanged();
     }
 
     @Override
@@ -58,13 +60,29 @@ public class ColorLink implements ISerializable<ColorLink> {
     @Override
     public ColorLink fromTag(CompoundTag tag) {
         //? if <=1.21.4 {
-        /*color = CatppuccinColor.valueOf(tag.getString(KEY_COLOR));
-        opacity = tag.contains(KEY_OPACITY) ? tag.getInt(KEY_OPACITY) : 255;
+        /*String name = tag.getString(KEY_COLOR);
+        int op = tag.contains(KEY_OPACITY) ? tag.getInt(KEY_OPACITY) : 255;
         *///? } else {
-        color = CatppuccinColor.valueOf(tag.getStringOr(KEY_COLOR, ""));
-        opacity = tag.getIntOr(KEY_OPACITY, 255);
+        String name = tag.getStringOr(KEY_COLOR, "");
+        int op = tag.getIntOr(KEY_OPACITY, 255);
         //? }
 
+        color = parseColor(name);
+        opacity = Math.clamp(op, 0, 255);
         return this;
+    }
+
+    public boolean isValid() {
+        return color != null;
+    }
+
+    private static CatppuccinColor parseColor(String name) {
+        if (name == null || name.isEmpty()) return null;
+
+        for (CatppuccinColor c : CatppuccinColor.values()) {
+            if (c.name().equalsIgnoreCase(name)) return c;
+        }
+
+        return null;
     }
 }

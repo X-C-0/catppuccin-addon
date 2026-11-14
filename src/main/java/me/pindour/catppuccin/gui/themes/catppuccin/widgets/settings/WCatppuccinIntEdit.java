@@ -146,18 +146,15 @@ public class WCatppuccinIntEdit extends WVerticalList implements CatppuccinWidge
     }
 
     private void setButton(int v) {
-        if (this.value == v) return;
+        int clamped = Math.clamp(v, min, max);
+        if (clamped == value) return;
 
-        if (v < min) this.value = min;
-        else this.value = Math.min(v, max);
+        value = clamped;
+        textBox.set(Integer.toString(value));
+        if (slider != null) slider.set(value);
 
-        if (this.value == v) {
-            textBox.set(Integer.toString(this.value));
-            if (slider != null) slider.set(this.value);
-
-            if (action != null) action.run();
-            if (actionOnRelease != null) actionOnRelease.run();
-        }
+        if (action != null) action.run();
+        if (actionOnRelease != null) actionOnRelease.run();
     }
 
     public int get() {
