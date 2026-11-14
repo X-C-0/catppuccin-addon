@@ -15,10 +15,13 @@ tasks.register("buildAllAndCollect") {
 stonecutter parameters {
     replacements {
         string(current.parsed < "26.3") {
-            // RenderPearl
             replace("com.mojang.renderpearl.api.pipeline.UniformType", "com.mojang.blaze3d.shaders.UniformType")
             replace("com.mojang.renderpearl.api.pipeline.PrimitiveTopology", "com.mojang.blaze3d.PrimitiveTopology")
-            replace("com.mojang.renderpearl.api.", "com.mojang.blaze3d.")
+            replace("com.mojang.renderpearl.api.pipeline.RenderPipeline", "com.mojang.blaze3d.pipeline.RenderPipeline")
+            replace("com.mojang.renderpearl.api.pipeline.BlendFunction", "com.mojang.blaze3d.pipeline.BlendFunction")
+            replace("com.mojang.renderpearl.api.pipeline.ColorTargetState", "com.mojang.blaze3d.pipeline.ColorTargetState")
+            replace("com.mojang.renderpearl.api.pipeline.BindGroupLayout", "com.mojang.blaze3d.pipeline.BindGroupLayout")
+            replace("com.mojang.renderpearl.api.buffers.GpuBufferSlice", "com.mojang.blaze3d.buffers.GpuBufferSlice")
         }
         string(current.parsed < "26.2") {
             // Screen

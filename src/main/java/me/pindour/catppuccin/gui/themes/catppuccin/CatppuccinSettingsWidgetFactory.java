@@ -51,14 +51,12 @@ import java.util.function.Consumer;
 import static me.pindour.catppuccin.utils.WidgetUtils.reset;
 import static meteordevelopment.meteorclient.MeteorClient.mc;
 
-//? if >=26.1 {
-import java.io.File;
 //? if >=26.3 {
 import meteordevelopment.meteorclient.utils.misc.FileDialogs;
-//? } else {
+//? } elif >=26.1 {
 /*import org.lwjgl.util.tinyfd.TinyFileDialogs;
+import java.io.File;
 *///? }
-//? }
 
 //? if >=26.2 {
 import me.pindour.catppuccin.gui.themes.catppuccin.widgets.settings.WCatppuccinLongEdit;
